@@ -136,7 +136,7 @@ else:
         "Pie chart by custom feature"
         s1, s2, s3, s4 = st.columns((1,1,1,1))
         feature = s1.selectbox('Choisir caractéristique', ['rdv_internet', 'age_bin', 'motif_du_rdv', 'duree_du_rdv', 'civilite', 'nouveau_patient',] , help = 'Choisie la caractéristique à Analyser')
-        DF_filter2 = s2.selectbox('Choisir ostéo ', df['agenda'].drop_duplicates().to_list() , help = 'Filtrer les données pour un ou tous les ostéos')
+        DF_filter = s2.selectbox('Choisir ostéo ', df['agenda'].drop_duplicates().to_list() , help = 'Filtrer les données pour un ou tous les ostéos')
         df_data = df[df['agenda']==DF_filter]
         
         fig = px.pie(df_data.sort_values(feature), values='rdv_compte', names= feature, title = feature)
