@@ -29,12 +29,12 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 t1, t2 = st.columns((0.07,1)) 
 
-logo = Image.open(r'C:\Users\julien\Documents\Python Scripts\boina_dashboard\LOGO LMDO petit.jpg')
+logo = Image.open('LOGO LMDO petit.jpg')
 
 t1.image(logo)
 t2.title("Dashboard demo: La maison de l'ostéopathie")
 
-df = pd.read_json(r'C:\Users\julien\Documents\Python Scripts\boina_dashboard\cleanded_df.json.gz', orient = 'index')
+df = pd.read_json('cleanded_df.json.gz', orient = 'index')
 
 # prep df
 df['month'] = ( pd.to_datetime(df['date_de_derniere_mise_a_jour'].str[:10])).dt.to_period('M')
