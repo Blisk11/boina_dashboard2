@@ -73,7 +73,7 @@ else:
 
         #Metrics setting and rendering
         f1, f2 = st.columns((1,1))
-        DF_filter = f1.selectbox('Choisir ostéo', df['agenda'].drop_duplicates().to_list() , index='Tous', help = 'Filtrer les données pour un ou tous les ostéos')
+        DF_filter = f1.selectbox('Choisir ostéo', df['agenda'].value_counts().index.to_list() , help = 'Filtrer les données pour un ou tous les ostéos')
         df_data = df[df['agenda']==DF_filter]
 
         g1, g2 = st.columns((1,1))
