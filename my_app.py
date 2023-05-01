@@ -35,6 +35,7 @@ else:
 
     p = Path(__file__).with_name('LOGO LMDO petit.jpeg')
     filename = p.absolute()
+    t2.title(filename)
     logo = Image.open(filename)
 
     t1.image(logo)
