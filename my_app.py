@@ -34,12 +34,12 @@ else:
 
     t1, t2 = st.columns((0.07,1)) 
 
-    logo = Image.open(LOGO LMDO petit.jpeg")
+    logo = Image.open("LOGO LMDO petit.jpeg")
 
     t1.image(logo)
     t2.title("Dashboard demo: La maison de l'ostéopathie")
 
-    df = pd.read_json(cleaned_df.json.gz", orient = 'index')
+    df = pd.read_json("cleaned_df.json.gz", orient = 'index')
     df_copy = df.copy()
 
     df_copy['agenda'] = 'Tous'
