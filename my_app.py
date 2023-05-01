@@ -31,15 +31,15 @@ if pwd!= 'fractaldefou':
 else:
     st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-    t1, t2 = st.columns((1,1)) 
+    t1, t2 = st.columns((0.5,1)) 
 
     p = Path(__file__).with_name('LOGO LMDO petit.jpeg')
     filename = p.absolute()
-    t2.title(filename)
+    t1.title(filename)
     logo = Image.open(filename)
 
-    t1.image(logo)
-    #t2.title("Dashboard demo: La maison de l'ostéopathie")
+    #t1.image(logo)
+    t2.title("Dashboard demo: La maison de l'ostéopathie")
 
     df = pd.read_excel('dashboard_df.xlsx', engine='openpyxl')
     df_copy = df.copy()
@@ -73,7 +73,7 @@ else:
 
 
         px_table = df_data.groupby(['nom osteo', 'departement'])['rdv_compte'].sum().reset_index().sort_values('rdv_compte',ascending=False)
-        px_table = px_table.pivot('departement', 'nom osteo', 'rdv_compte')
+        px_table = px_table.pivot(index = 'departement', columns = 'nom osteo', values = 'rdv_compte')
         # sort columns by osteo
         px_table = px_table[px_table.sum().sort_values(ascending=False).index.to_list()].fillna(' ')
 
