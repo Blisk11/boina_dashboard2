@@ -31,7 +31,7 @@ if pwd!= 'fractaldefou':
 else:
     st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-    t1, t2 = st.columns((0.07,1)) 
+    t1, t2 = st.columns((1,1)) 
 
     p = Path(__file__).with_name('LOGO LMDO petit.jpeg')
     filename = p.absolute()
@@ -39,7 +39,7 @@ else:
     logo = Image.open(filename)
 
     t1.image(logo)
-    t2.title("Dashboard demo: La maison de l'ostéopathie")
+    #t2.title("Dashboard demo: La maison de l'ostéopathie")
 
     df = pd.read_excel('dashboard_df.xlsx')
     df_copy = df.copy()
