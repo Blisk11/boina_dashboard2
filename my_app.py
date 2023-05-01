@@ -80,7 +80,7 @@ else:
         
         DF_filter1 = f11.selectbox('Choisir ostéo', df['agenda'].value_counts().index.to_list() , key = 2, help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')
         
-        quarter = f22.multiselect("Choisir les trimestres", df[(df['agenda']==DF_filter)]['trimestre'].sort_values().drop_duplicates().to_list(), df['trimestre'].sort_values().drop_duplicates().to_list(),)
+        quarter = f22.multiselect("Choisir les trimestres", df[(df['agenda']==DF_filter1)]['trimestre'].sort_values().drop_duplicates().to_list(), df['trimestre'].sort_values().drop_duplicates().to_list(),)
 
         feature = f33.selectbox("Choisir caractéristique à analyser", ['rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient',] , help = "Choisir l'axe des X du tableau de gauche")
         
