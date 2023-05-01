@@ -41,7 +41,7 @@ else:
     t1.image(logo)
     #t2.title("Dashboard demo: La maison de l'ostéopathie")
 
-    df = pd.read_excel('dashboard_df.xlsx')
+    df = pd.read_excel('dashboard_df.xlsx', engine='openpyxl')
     df_copy = df.copy()
 
     df_copy['agenda'] = 'Tous'
