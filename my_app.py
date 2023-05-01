@@ -35,10 +35,11 @@ else:
 
     p = Path(__file__).with_name('LOGO LMDO petit.jpeg')
     filename = p.absolute()
-    t1.title(filename)
+    #t1.title(filename)
+    #/app/boina_dashboard2/LOGO LMDO petit.jpeg
     logo = Image.open(filename)
 
-    #t1.image(logo)
+    t1.image(logo)
     t2.title("Dashboard demo: La maison de l'ostéopathie")
 
     df = pd.read_excel('dashboard_df.xlsx', engine='openpyxl')
