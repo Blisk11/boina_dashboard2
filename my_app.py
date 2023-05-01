@@ -2,17 +2,15 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import time
-import pandas as pd
 import numpy as np
 from datetime import datetime, date
-import streamlit as st
 from math import floor
 import seaborn as sns
 import matplotlib as plt
-from geopy.geocoders import Nominatim
 import plotly.express as px
 from PIL import Image
 from pathlib import Path
+import openpyxl
 
 
 # streamlit options
