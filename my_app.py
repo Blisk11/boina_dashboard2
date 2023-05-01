@@ -42,9 +42,7 @@ else:
     t1.image(logo)
     t2.title("Dashboard demo: La maison de l'ostéopathie")
 
-    p_df = Path(__file__).with_name('cleaned_df.json.gz')
-    filename_df = p_df.absolute()
-    df = pd.read_json(filename_df, orient = 'index')
+    df = pd.read_excel('dashboard_df.xlsx')
     df_copy = df.copy()
 
     df_copy['agenda'] = 'Tous'
