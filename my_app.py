@@ -12,6 +12,7 @@ import matplotlib as plt
 from geopy.geocoders import Nominatim
 import plotly.express as px
 from PIL import Image
+from pathlib import Path
 
 
 # streamlit options
@@ -34,12 +35,16 @@ else:
 
     t1, t2 = st.columns((0.07,1)) 
 
-    logo = Image.open("LOGO LMDO petit.jpeg")
+    p = Path(__file__).with_name('LOGO LMDO petit.jpeg')
+    filename = p.absolute()
+    logo = Image.open(filename)
 
     t1.image(logo)
     t2.title("Dashboard demo: La maison de l'ostéopathie")
 
-    df = pd.read_json("cleaned_df.json.gz", orient = 'index')
+    p = Path(__file__).with_name('cleaned_df.json.gz')
+    filename = p.absolute()
+    df = pd.read_json(filename, orient = 'index')
     df_copy = df.copy()
 
     df_copy['agenda'] = 'Tous'
