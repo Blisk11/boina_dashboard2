@@ -42,8 +42,8 @@ else:
     t1.image(logo)
     t2.title("Dashboard demo: La maison de l'ostéopathie")
 
-    p = Path(__file__).with_name('cleaned_df.json.gz')
-    filename = p.absolute()
+    p_df = Path(__file__).with_name('cleaned_df.json.gz')
+    filename = p_df.absolute()
     df = pd.read_json(filename, orient = 'index')
     df_copy = df.copy()
 
