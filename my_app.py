@@ -11,9 +11,10 @@ import plotly.express as px
 from PIL import Image
 from pathlib import Path
 import openpyxl
-import requests
-import json
-import xml.etree.ElementTree as ET
+import seaborn as sns
+import matplotlib as plt
+
+
 
 
 # streamlit options
@@ -39,9 +40,9 @@ url = "http://"+domain+"/remote.php/dav/files/"+auth[0];
 headers = {"OCS-APIRequest": "true"}
 
 pwd1, pwd2= st.columns((1,1))
-pwd1 = st.text_input("Password:", value="")
+pwd = pwd1.text_input("Password:", value="")
 
-if pwd1!= 'fractaldefou':
+if pwd!= 'fractaldefou':
     st.title('Please enter correct password')
 else:
     st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
@@ -89,8 +90,8 @@ else:
             df_data = df[(df['agenda']==DF_filter)]        
             g1, g2 = st.columns((1,1))
             # bar chart
-
-            groupby_df_list = list(set([DF_legend, 'year', 'month_number', 'month']))
+            
+            groupby_df_list = [DF_legend, 'year', 'month_number', 'month']
             data = df_data.groupby(groupby_df_list)['index'].count().reset_index()
             data.sort_values(['year', 'month_number'], ascending = [True, True], inplace=True)
             #data['month'] = data['month'].astype(str).str.replace('-', '_')
