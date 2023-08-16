@@ -11,6 +11,8 @@ import plotly.express as px
 from PIL import Image
 from pathlib import Path
 import openpyxl
+import requests
+import json
 
 
 # streamlit options
