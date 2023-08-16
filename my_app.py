@@ -33,7 +33,7 @@ st.image(logo)
 pwd1, pwd2= st.columns((1,1))
 pwd1 = st.text_input("Password:", value="")
 
-if pwd!= 'fractaldefou':
+if pwd1!= 'fractaldefou':
     st.title('Please enter correct password')
 else:
     st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
