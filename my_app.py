@@ -13,7 +13,6 @@ from pathlib import Path
 import openpyxl
 import seaborn as sns
 import matplotlib as plt
-import xml.etree.ElementTree as ET
 import requests
 import json
 
@@ -148,7 +147,7 @@ else:
             fig = go.Figure(
                 data = [go.Table (
                     header = dict(
-                    values = list(px_table.columns),
+                    values = px_table.columns.to_list(),
                     font=dict(size=12, color = 'white'),
                     fill_color = '#264653',
                     line_color = 'rgba(255,255,255,0.2)',
