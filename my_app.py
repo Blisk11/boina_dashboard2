@@ -30,27 +30,43 @@ filename = p.absolute()
 logo = Image.open(filename)
 st.image(logo)
 
-pwd = st.text_input("Password:", value="")
+pwd1, pwd2= st.columns((1,1))
+pwd1 = st.text_input("Password:", value="")
 
 if pwd!= 'fractaldefou':
     st.title('Please enter correct password')
 else:
     st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
-    #t1, t2 = st.columns((0.25,1)) 
+    with st.spinner('Mise à jour des informations, un instant SVP.'):
+#t1, t2 = st.columns((0.25,1)) 
+    path = "/Oisif-Pro/operation/DATA/dashboard_data";
+    df_list = []
+    r = requests.request('PROPFIND', url+path, data=None, auth=auth);
+    data = ET.fromstring(r.text);
+    list = [el[0].text for el in data];
+    for i in list:
+        if 'Maison_OSTEOPATHIE_Osteo' in i:
+            path = i
+            print(i)
+            r = requests.request('GET', "http://"+domain+path, auth=auth)
+            temp_df = pd.read_excel(r.content, )
+            df_list.append(temp_df)
 
 
     st.title("Dashboard demo: La maison de l'ostéopathie")
     
     
-    df = pd.read_excel('dashboard_df.xlsx', engine='openpyxl')
+    #df = pd.read_excel('dashboard_df.xlsx', engine='openpyxl')
+    df = pd.concat(df_list)
+    df = df.reset_index()
     df_copy = df.copy()
 
     df_copy['agenda'] = 'Tous'
 
     df = pd.concat([df, df_copy])
     df = df.reset_index()
-    with st.spinner('Updating Report...'):
+    with st.spinner('Mise à jour des informations, un instant SVP.'):
 
         #Metrics setting and rendering
         f1, f2= st.columns((1,1))
