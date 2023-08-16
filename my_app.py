@@ -5,13 +5,12 @@ import time
 import numpy as np
 from datetime import datetime, date
 from math import floor
+import seaborn as sns
+import matplotlib as plt
 import plotly.express as px
 from PIL import Image
 from pathlib import Path
 import openpyxl
-import xml.etree.ElementTree as ET
-import requests
-import json
 
 
 # streamlit options
@@ -30,6 +29,11 @@ filename = p.absolute()
 #/app/boina_dashboard2/LOGO LMDO petit.jpeg
 logo = Image.open(filename)
 st.image(logo)
+
+domain = "cloud.leviia.com";
+auth=('boina-oisif_pro', 'Heokepide01!'); # admin user
+url = "http://"+domain+"/remote.php/dav/files/"+auth[0];
+headers = {"OCS-APIRequest": "true"}
 
 pwd1, pwd2= st.columns((1,1))
 pwd1 = st.text_input("Password:", value="")
