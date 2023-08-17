@@ -39,6 +39,9 @@ auth=('boina-oisif_pro', 'Heokepide01!'); # admin user
 url = "http://"+domain+"/remote.php/dav/files/"+auth[0];
 headers = {"OCS-APIRequest": "true"}
 
+category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'statut', 'comment_avezvous_retrouve_notre_fiche_', ]
+
+
 pwd1, pwd2= st.columns((1,1))
 pwd = pwd1.text_input("Password:", value="")
 
@@ -85,7 +88,7 @@ else:
             df_data = df[(df['agenda']==DF_filter)]
 
             f1, f2= st.columns((1,1))
-            category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient',]
+            
             
             DF_legend = f1.selectbox('Choisir légende du tableau ci-dessous', category_list , help = 'La légende est la couleur de barre du tableau ci-dessous')              
 
