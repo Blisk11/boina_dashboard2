@@ -17,9 +17,6 @@ import xml.etree.ElementTree as ET
 import requests
 import json
 
-
-
-
 # streamlit options
 st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(page_title='boina dashboard', layout = 'wide', initial_sidebar_state = 'auto')
@@ -87,8 +84,10 @@ else:
 
             df_data = df[(df['agenda']==DF_filter)]
 
-            f1, f2= st.columns((1,1))        
-            DF_legend = f1.selectbox('Choisir légende du tableau ci-dessous', ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient',] , help = 'La légende est la couleur de barre du tableau ci-dessous')              
+            f1, f2= st.columns((1,1))
+            category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient',]
+            
+            DF_legend = f1.selectbox('Choisir légende du tableau ci-dessous', category_list , help = 'La légende est la couleur de barre du tableau ci-dessous')              
 
             df_data = df[(df['agenda']==DF_filter)]        
             g1, g2 = st.columns((1,1))
@@ -110,7 +109,7 @@ else:
 
             quarter = f22.multiselect("Choisir les trimestres", df[(df['agenda']==DF_filter1)]['trimestre'].sort_values().drop_duplicates().to_list(), df['trimestre'].sort_values().drop_duplicates().to_list(),)
 
-            feature = f33.selectbox("Choisir caractéristique à analyser", ['rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient',] , help = "Choisir l'axe des X du tableau de gauche")
+            feature = f33.selectbox("Choisir caractéristique à analyser", category_list , help = "Choisir l'axe des X du tableau de gauche")
 
 
             df_data = df[(df['agenda']==DF_filter1) & (df['trimestre'].isin(quarter))]
@@ -136,19 +135,30 @@ else:
     #        fig = px.pie(df_data.sort_values(feature), values='rdv_compte', names= feature, title = feature)
     #        fig.update_traces(textposition='inside', textinfo='percent+label')
     #        g3.plotly_chart(fig,)
-            ###
+            ###      
+        
+            f1111, f2222, f3333empty = st.columns((1,1,1))
+            feature1111 = f1111.selectbox("Choisir les colonnes du rangées ci-dessous", category_list )
+            category_list_for_table = sorted(set(category_list) - set([feature1111]))
+            feature2222 = f2222.selectbox("Choisir les colonnes", category_list_for_table,  ) 
+            if feature1111 == feature2222:
+                st.caption("Si vous voyez une erreur, c'est parce que la caractéristique sélectionné pour les colonnes et rangées sont la même", )
 
-            px_table = df_data.groupby(['nom osteo', 'departement'])['rdv_compte'].sum().reset_index().sort_values('rdv_compte',ascending=False)
-            px_table = px_table.pivot(index = 'departement', columns = 'nom osteo', values = 'rdv_compte')
-            # sort columns by osteo
+            px_table = df_data.groupby([feature1111,feature2222 ])['rdv_compte'].sum().reset_index().sort_values('rdv_compte',ascending=False)
+            px_table = px_table.pivot(index = feature1111, columns = feature2222, values = 'rdv_compte')
+            px_table1 = px_table.copy()
+            px_table.loc["Total"] = px_table.sum()
+
+            px_table1 = (px_table1.div(px_table1.sum(), axis=1).round(2)*100).fillna(0).astype(int).astype(str) + '%'        
+            # sort columns
             px_table = px_table[px_table.sum().sort_values(ascending=False).index.to_list()].fillna(' ')
-
+            px_table1 = px_table1[px_table1.sum().sort_values(ascending=False).index.to_list()].fillna(' ')
             #st.dataframe(px_table)
             px_table.reset_index(inplace= True)
             fig = go.Figure(
                 data = [go.Table (
                     header = dict(
-                    values = px_table.columns.to_list(),
+                    values = px_table.columns,
                     font=dict(size=12, color = 'white'),
                     fill_color = '#264653',
                     line_color = 'rgba(255,255,255,0.2)',
@@ -163,7 +173,39 @@ else:
                     #fill_color = colourcode,
                     line_color = 'rgba(255,255,255,0.2)',
                     height=20))],)
-            "Nombre de consultation par département"
+            "Nombre de consultation par " + feature1111 + ' et ' + feature2222
+            fig.update_layout(
+            width=1400,
+            height=450,
+            margin=dict(
+                l=0,
+                r=0,
+                b=0,
+                t=0
+                )
+            )
+            st.plotly_chart(fig,)
+
+            st.caption('Les valeurs du tableau ci-haut, mais en % du total (par colonne)')
+            px_table1.reset_index(inplace= True)
+            fig = go.Figure(
+                data = [go.Table (
+                    header = dict(
+                    values = px_table1.columns,
+                    font=dict(size=12, color = 'white'),
+                    fill_color = '#264653',
+                    line_color = 'rgba(255,255,255,0.2)',
+                    align = ['left','center'],
+                    #text wrapping
+                    height=20
+                    )
+                , cells = dict(
+                    values = [px_table1[K].tolist() for K in px_table1.columns], 
+                    font=dict(size=12),
+                    align = ['left','center'],
+                    #fill_color = colourcode,
+                    line_color = 'rgba(255,255,255,0.2)',
+                    height=20))],)
             fig.update_layout(
             width=1400,
             height=450,
