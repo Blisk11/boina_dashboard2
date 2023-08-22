@@ -39,7 +39,7 @@ auth=('boina-oisif_pro', 'Heokepide01!'); # admin user
 url = "http://"+domain+"/remote.php/dav/files/"+auth[0];
 headers = {"OCS-APIRequest": "true"}
 
-category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'statut', 'comment_avezvous_retrouve_notre_fiche_', ]
+category_list = ['osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'statut', 'comment_avezvous_retrouve_notre_fiche_', ]
 
 
 pwd1, pwd2= st.columns((1,1))
@@ -121,7 +121,7 @@ else:
 
 
             # Here we use a column with categorical data
-            fig = px.histogram(df_data.sort_values(feature), x=feature, color = 'nom osteo', title=feature)    
+            fig = px.histogram(df_data.sort_values(feature), x=feature, color = 'osteo', title=feature)    
             g22.plotly_chart(fig, use_container_width=True)
 
             fig = px.pie(df_data.sort_values(feature), values='rdv_compte', names= feature, title = feature)
