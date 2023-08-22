@@ -74,7 +74,7 @@ else:
         df = df.reset_index()
         df_copy = df.copy()
 
-        df_copy['agenda'] = 'Tous'
+        df_copy['osteo'] = 'Tous'
 
         df = pd.concat([df, df_copy])
         df = df.reset_index()
@@ -83,16 +83,16 @@ else:
             #Metrics setting and rendering
             f1, f2= st.columns((1,1))
 
-            DF_filter = f1.selectbox('Choisir ostéo', df['agenda'].value_counts().index.to_list() , help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')              
+            DF_filter = f1.selectbox('Choisir ostéo', df['osteo'].value_counts().index.to_list() , help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')              
 
-            df_data = df[(df['agenda']==DF_filter)]
+            df_data = df[(df['osteo']==DF_filter)]
 
             f1, f2= st.columns((1,1))
             
             
             DF_legend = f1.selectbox('Choisir légende du tableau ci-dessous', category_list , help = 'La légende est la couleur de barre du tableau ci-dessous')              
 
-            df_data = df[(df['agenda']==DF_filter)]        
+            df_data = df[(df['osteo']==DF_filter)]        
             g1, g2 = st.columns((1,1))
             # bar chart
             
@@ -108,14 +108,14 @@ else:
             #Metrics setting and rendering
             f11, f22, f33 = st.columns((1,1,1))
 
-            DF_filter1 = f11.selectbox('Choisir ostéo', df['agenda'].value_counts().index.to_list() , key = 2, help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')
+            DF_filter1 = f11.selectbox('Choisir ostéo', df['osteo'].value_counts().index.to_list() , key = 2, help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')
 
-            quarter = f22.multiselect("Choisir les trimestres", df[(df['agenda']==DF_filter1)]['trimestre'].sort_values().drop_duplicates().to_list(), df['trimestre'].sort_values().drop_duplicates().to_list(),)
+            quarter = f22.multiselect("Choisir les trimestres", df[(df['osteo']==DF_filter1)]['trimestre'].sort_values().drop_duplicates().to_list(), df['trimestre'].sort_values().drop_duplicates().to_list(),)
 
             feature = f33.selectbox("Choisir caractéristique à analyser", category_list , help = "Choisir l'axe des X du tableau de gauche")
 
 
-            df_data = df[(df['agenda']==DF_filter1) & (df['trimestre'].isin(quarter))]
+            df_data = df[(df['osteo']==DF_filter1) & (df['trimestre'].isin(quarter))]
 
             g22, g_empty, g33 = st.columns((1, 0.2, 1))
 
@@ -132,8 +132,8 @@ else:
     #        "Pie chart by custom feature"
     #        s1, s2, s3, s4 = st.columns((1,1,1,1))
     #        feature = s1.selectbox('Choisir caractéristique', ['rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin',   #'nbs_rdv_bin', 'nouveau_patient',] , help = 'Choisie la caractéristique à Analyser')
-    #        DF_filter = s2.selectbox('Choisir ostéo ', df['agenda'].drop_duplicates().to_list() , help = 'Filtrer les données pour un ou tous les ostéos')
-    #        df_data = df[df['agenda']==DF_filter].dropna(subset = [feature])
+    #        DF_filter = s2.selectbox('Choisir ostéo ', df['osteo'].drop_duplicates().to_list() , help = 'Filtrer les données pour un ou tous les ostéos')
+    #        df_data = df[df['osteo']==DF_filter].dropna(subset = [feature])
 
     #        fig = px.pie(df_data.sort_values(feature), values='rdv_compte', names= feature, title = feature)
     #        fig.update_traces(textposition='inside', textinfo='percent+label')
