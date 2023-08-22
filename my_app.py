@@ -27,6 +27,39 @@ hide_streamlit_style = """<style>
 footer {visibility: hidden;}
 </style>
 """
+
+st.markdown(
+    """
+<style>
+div[data-testid="metric-container"] > label[data-testid="stMetricLabel"] > div {
+   overflow-wrap: break-word;
+   white-space: break-spaces;
+}
+div[data-testid="metric-container"] > label[data-testid="stMetricLabel"] > div p {
+   font-size: 200% !important;
+}
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
+css='''
+[data-testid="metric-container"] {
+    width: fit-content;
+    margin: auto;
+}
+
+[data-testid="metric-container"] > div {
+    width: fit-content;
+    margin: auto;
+}
+
+[data-testid="metric-container"] label {
+    width: fit-content;
+    margin: auto;
+}
+'''
+
 p = Path(__file__).with_name('LOGO LMDO petit.jpeg')
 filename = p.absolute()
 #t1.title(filename)
@@ -39,8 +72,28 @@ auth=('boina-oisif_pro', 'Heokepide01!'); # admin user
 url = "http://"+domain+"/remote.php/dav/files/"+auth[0];
 headers = {"OCS-APIRequest": "true"}
 
-category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'statut', 'comment_avezvous_retrouve_notre_fiche_', ]
+def ColourWidgetText(wgt_txt, wch_colour = '#000000'):
+    htmlstr = """<script>var elements = window.parent.document.querySelectorAll('*'), i;
+                    for (i = 0; i < elements.length; ++i) { if (elements[i].innerText == |wgt_txt|) 
+                        elements[i].style.color = ' """ + wch_colour + """ '; } </script>  """
 
+    htmlstr = htmlstr.replace('|wgt_txt|', "'" + wgt_txt + "'")
+    components.html(f"{htmlstr}", height=0, width=0)
+
+def create_card(st, label, value1, value2):
+    if value1 > 0:
+        kpi_color = '#65AC4C' # green
+        display_value1 = '+ ' + str(value1) + ' RDV'
+    else:
+        kpi_color = '#FF0000' #red
+        display_value1 = '- ' + str(value1) + ' RDV'
+        
+    return st.metric(label, display_value1, "{:.1%}".format(value2)) , ColourWidgetText(display_value1, kpi_color)
+
+
+
+
+category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'statut', 'comment_avezvous_retrouve_notre_fiche_', ]
 
 pwd1, pwd2= st.columns((1,1))
 pwd = pwd1.text_input("Password:", value="")
@@ -78,22 +131,35 @@ else:
 
         df = pd.concat([df, df_copy])
         df = df.reset_index()
+        df['year_month'] = df['year'].astype(str) + '-' + df['month_number'].apply(lambda x: '{:02d}'.format(x))
+        df['day_number'] = df['date_de_debut'].dt.day
+
+        max_month_number = int(df['year_month'].max()[-2:])
+        max_day_number = df[df['year_month']==df['year_month'].max()]['day_number'].max()
+        previous_year = int(df['year_month'].max()[:4]) - 1
+
+        previous_month = df['year_month'].drop_duplicates().sort_values().to_list()[-2]
+
+        previous_year_max_date = str(previous_year) + '-' + str(max_month_number) + '-' + str(max_day_number)
+
         with st.spinner('Mise à jour des informations, un instant SVP.'):
 
             #Metrics setting and rendering
             f1, f2= st.columns((1,1))
-
-            DF_filter = f1.selectbox('Choisir ostéo', df['osteo'].value_counts().index.to_list() , help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')              
-
+            DF_filter = f1.selectbox('Choisir ostéo', df['osteo'].value_counts().index.to_list() , help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')         
             df_data = df[(df['osteo']==DF_filter)]
-
-            f1, f2= st.columns((1,1))
             
-            
+            f1, f2= st.columns((1,1))         
             DF_legend = f1.selectbox('Choisir légende du tableau ci-dessous', category_list , help = 'La légende est la couleur de barre du tableau ci-dessous')              
 
-            df_data = df[(df['osteo']==DF_filter)]        
-            g1, g2 = st.columns((1,1))
+            df_data = df[(df['osteo']==DF_filter)]
+            KPI_vs_previous_month = df_data[df_data['year_month']==df_data['year_month'].max()]['rdv_compte'].sum() - df_data[(df_data['year_month']== previous_month) & (df_data['day_number']<=max_day_number)]['rdv_compte'].sum()
+            KPI_vs_previous_month_perc = KPI_vs_previous_month / df_data[(df_data['year_month']== previous_month) & (df_data['day_number']<=max_day_number)]['rdv_compte'].sum()
+
+            KPI_vs_previous_year =  df_data[df_data['year']==df_data['year'].max()]['rdv_compte'].sum() - df_data[(df_data['year']==previous_year) & (df['date_de_debut']<= previous_year_max_date)]['rdv_compte'].sum()
+            KPI_vs_previous_year_perc = KPI_vs_previous_year / df_data[(df_data['year']==previous_year) & (df['date_de_debut']<= previous_year_max_date)]['rdv_compte'].sum()
+
+            g1, g2, g3 = st.columns((2, 1, 1))
             # bar chart
             
             groupby_df_list = [DF_legend, 'year', 'month_number', 'month']
@@ -104,8 +170,11 @@ else:
 
             fig = px.bar(data, x="month", y="nbs rdv", color= DF_legend, title="Nombre de rdv par mois")   
             g1.plotly_chart(fig, use_container_width=True)
-
+            create_card(g2, 'VS mois dernier', KPI_vs_previous_month, KPI_vs_previous_month_perc)
+            create_card(g3, 'VS Année dernière', KPI_vs_previous_year, KPI_vs_previous_year_perc)
             #Metrics setting and rendering
+            
+            
             f11, f22, f33 = st.columns((1,1,1))
 
             DF_filter1 = f11.selectbox('Choisir ostéo', df['osteo'].value_counts().index.to_list() , key = 2, help = 'Filtrer les données pour un ou tous les ostéos (pour les 2 tableaux ci-dessous)')
@@ -220,3 +289,4 @@ else:
                 )
             )
             st.plotly_chart(fig,)
+st.markdown(f'<style>{css}</style>',unsafe_allow_html=True)
