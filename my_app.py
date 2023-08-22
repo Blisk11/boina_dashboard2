@@ -46,7 +46,7 @@ pwd1, pwd2= st.columns((1,1))
 pwd = pwd1.text_input("Password:", value="")
 
 if pwd!= 'fractaldefou':
-    st.title('Please enter correct password')
+    st.title('Entrer votre mot de passe SVP')
 else:
     st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
@@ -66,7 +66,7 @@ else:
                 df_list.append(temp_df)
 
 
-        st.title("Dashboard demo: La maison de l'ostéopathie")
+        st.title("Dashboard: La maison de l'ostéopathie")
 
 
         #df = pd.read_excel('dashboard_df.xlsx', engine='openpyxl')
