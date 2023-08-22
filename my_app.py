@@ -92,7 +92,7 @@ def create_card(st, label, value1, value2):
         display_value1 = '+ ' + str(value1) + ' RDV'
     else:
         kpi_color = '#FF0000' #red
-        display_value1 = '- ' + str(value1) + ' RDV'
+        display_value1 = str(value1) + ' RDV'
         
     return st.metric(label, display_value1, "{:.1%}".format(value2)) , ColourWidgetText(display_value1, kpi_color)
 
