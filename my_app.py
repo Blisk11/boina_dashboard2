@@ -33,6 +33,7 @@ st.markdown(
     """
 <style>
 div[data-testid="metric-container"] > label[data-testid="stMetricLabel"] > div {
+   
    overflow-wrap: break-word;
    white-space: break-spaces;
 }
@@ -48,16 +49,20 @@ css='''
 [data-testid="metric-container"] {
     width: fit-content;
     margin: auto;
+    padding: 90px 0px;
+    
 }
 
 [data-testid="metric-container"] > div {
     width: fit-content;
     margin: auto;
+    font-size: 35px;
 }
 
 [data-testid="metric-container"] label {
     width: fit-content;
     margin: auto;
+    font-size: 20px;
 }
 '''
 
@@ -163,9 +168,9 @@ else:
             g1, g2, g3 = st.columns((2, 1, 1))
             # bar chart
             
-            groupby_df_list = [DF_legend, 'year', 'month_number', 'month']
+            groupby_df_list = [DF_legend, 'year_month', 'month']
             data = df_data.groupby(groupby_df_list)['index'].count().reset_index()
-            data.sort_values(['year', 'month_number'], ascending = [True, True], inplace=True)
+            data.sort_values(['year_month'], ascending = True, inplace=True)
             #data['month'] = data['month'].astype(str).str.replace('-', '_')
             data.rename(columns = {'index':'nbs rdv'}, inplace=True)
 
