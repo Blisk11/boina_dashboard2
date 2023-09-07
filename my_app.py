@@ -166,10 +166,10 @@ else:
             KPI_vs_previous_year_perc = KPI_vs_previous_year / df_data[(df_data['year']==previous_year) & (df['date_de_debut']<= previous_year_max_date)]['rdv_compte'].sum()
 
             g1, g2, g3 = st.columns((2, 1, 1))
-            # bar chart   
+            # bar chart    
             groupby_df_list = [DF_legend, 'year_month', 'month', 'year', 'month_number']
             data = df_data.groupby(groupby_df_list)['index'].count().reset_index()
-            data.sort_values(['year', 'month_number'], [True, True], inplace=True)
+            data.sort_values(['year', 'month_number'], ascending = [True, True], inplace=True)
             #data['month'] = data['month'].astype(str).str.replace('-', '_')
             data.rename(columns = {'index':'nbs rdv'}, inplace=True)
 
