@@ -99,7 +99,7 @@ def create_card(st, label, value1, value2):
 
 
 
-category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'statut', 'comment_avezvous_retrouve_notre_fiche_', ]
+category_list = ['nom osteo', 'rdv_internet', 'age_bin', 'motif_du_rdv', 'fiche_trouvé', 'duree_du_rdv', 'civilite', 'distance_bin', 'nbs_rdv_bin', 'nouveau_patient', 'comment_avezvous_retrouve_notre_fiche_', ]
 
 pwd1, pwd2= st.columns((1,1))
 pwd = pwd1.text_input("Password:", value="")
@@ -167,14 +167,17 @@ else:
 
             g1, g2, g3 = st.columns((2, 1, 1))
             # bar chart
-            
-            groupby_df_list = [DF_legend, 'year_month', 'month']
+         
+            groupby_df_list = [DF_legend, 'year_month', 'month', 'year', 'month_number']
             data = df_data.groupby(groupby_df_list)['index'].count().reset_index()
-            data.sort_values(['year_month'], ascending = True, inplace=True)
+            data.sort_values(['year', 'month_number'], ascending = True, inplace=True)
             #data['month'] = data['month'].astype(str).str.replace('-', '_')
             data.rename(columns = {'index':'nbs rdv'}, inplace=True)
 
-            fig = px.bar(data, x="month", y="nbs rdv", color= DF_legend, title="Nombre de rdv par mois")   
+            fig = px.bar(data, x="month", y="nbs rdv", color= DF_legend, title="Nombre de rdv par mois", )
+            fig.add_hline(y=200,  line_color="red")
+            fig.add_hline(y=247,  line_color="blue")
+            
             g1.plotly_chart(fig, use_container_width=True)
             create_card(g2, 'VS mois dernier', KPI_vs_previous_month, KPI_vs_previous_month_perc)
             create_card(g3, 'VS Année dernière', KPI_vs_previous_year, KPI_vs_previous_year_perc)
